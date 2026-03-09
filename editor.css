@@ -1,0 +1,195 @@
+/* Editor / C-Page specific styles */
+
+:root {
+  --green-strong: #43E179;
+  /* CHANGED: Switched back to a transparent version of the strong green 
+     instead of a dark solid color. This prevents the "muddy" look. */
+  --green-soft: rgba(67, 225, 121, 0); 
+}
+
+.green-tint {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+
+  /* MASKING: Kept identical to your settings */
+  mask-image: linear-gradient(to bottom, black 0%, black 6%, transparent 8%), url('/GridBlock02.png');
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 1%, transparent 8%), url('/GridBlock02.png');
+
+  mask-mode: match-source, luminance;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  -webkit-mask-position: center;
+  mask-position: center;
+
+  /* FIXED GRADIENT: We now stay with the strong neon color (like the white version).
+     The mask handles the fading, so we don't need to fade the color itself. */
+  background: linear-gradient(to bottom, var(--green-strong), var(--green-strong) 65%);
+
+  /* CRITICAL FIX: 'screen' makes the green pop against the dark blue 
+     instead of mixing with it physically. */
+ 
+  
+  opacity: 1; /* Increased opacity because 'screen' mode is naturally lighter */
+  transition: opacity .25s ease;
+  border-radius: 6px;
+}
+
+@media (max-width:420px){
+  .green-tint{
+    mask-image: linear-gradient(to bottom, black 0%, black 8%, transparent 12%), url('/GridBlock02.png');
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 8%, transparent 12%), url('/GridBlock02.png');
+  }
+}
+.block-container {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    -webkit-user-drag: none;
+}
+
+.editor-tools-container {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 24%;
+    display: flex;
+    gap: 10px;
+}
+
+.editor-tool-btn {
+    width: 110px;
+    height: 110px;
+    pointer-events: auto;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.editor-bottom-box {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 30%;
+    pointer-events: auto;
+}
+
+.editor-separator-line {
+    position: absolute;
+    top: 50%;
+    width: 240px; 
+    height: 3.5px;
+    opacity: 1; 
+    pointer-events: none;
+}
+
+.editor-left-actions {
+    position: absolute;
+    left: 20px;
+    top: 43%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: -25px;
+}
+
+.editor-btn-wrap {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.editor-center-btn {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 110px;
+    height: 110px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.editor-center-icon {
+    width: 75%;
+    height: auto;
+    transform: translateY(-6px);
+    pointer-events: none;
+}
+
+/* Swipe button styling (right side of bottom box). Kept touch-friendly and matching GD visuals */
+.editor-swipe-btn {
+    position: absolute;
+    right: 24px;
+    bottom: 12%;
+    width: 120px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 30020;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    user-select: none;
+}
+
+/* Label inside the swipe button: centered, touch-friendly, and visually consistent */
+.editor-swipe-btn .swipe-label {
+    pointer-events: none;
+    text-transform: lowercase;
+    transform: translateY(-4px);
+    font-family: 'Pusab', sans-serif;
+    font-size: 21px;
+    color: #fff;
+    -webkit-text-stroke: 1px rgba(0,0,0,0.8);
+    text-align: center;
+    line-height: 1;
+    width: 100%;
+}
+
+.placed-block {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    left: 0;
+    top: 0;
+    image-rendering: smooth;
+    pointer-events: none;
+    -webkit-user-drag: none;
+}
+
+.editor-pause-btn, .editor-settings-btn {
+    position: absolute;
+    top: 6px;
+    width: 95px;
+    z-index: 30010;
+    cursor: pointer;
+}
