@@ -1,0 +1,869 @@
+/* Level Card and Level Select Styles (moved from style.css) */
+
+/* Level Card Styles */
+.level-wrapper {
+    position: absolute;
+    top: 35%; /* moved higher so levels sit closer to the top */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 800px;
+    height: 220px;        /* shortened level box area */
+    perspective: 1000px;
+    z-index: 10005;
+    pointer-events: none;
+}
+
+/* Progress bars container shown beneath the level card */
+.progress-container {
+    position: absolute;
+    top: calc(100% + 8px); /* tightened vertical gap so bars/text sit closer above the ground */
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 18px; /* increased vertical spacing between each label+pill group */
+    align-items: center;
+    pointer-events: none;
+    z-index: 10005;
+}
+
+/* Label centered above each pill */
+.progress-label {
+    font-family: 'Pusab', sans-serif;
+    color: #FFFFFF;
+    font-size: 34px; /* increased label size for improved readability */
+    font-weight: 500; /* thinner weight for less blocky appearance */
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    text-align: center;
+    margin-top: 20px; /* push labels further down */
+    margin-bottom: -10px;
+    -webkit-text-stroke: 1.5px rgba(0,0,0,0.9); /* thinner outline for progress labels */
+    text-shadow: none !important;
+    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.20)) !important;
+    pointer-events: none;
+}
+
+/* The pill background (track) */
+/* Made semi-transparent to match the level-card's navy tint */
+.progress-pill {
+    width: 103%;
+    max-width: 1000px; /* match level-wrapper max width */
+    height: 48px; /* larger pill height for bigger visual track */
+    background: rgba(0, 0, 134, 0.85); /* semi-transparent navy matching .level-card */
+    border-radius: 999px;
+    overflow: hidden;
+    box-shadow: none; /* remove subtle inner highlight */
+    pointer-events: none;
+    position: relative;
+    left: 10px;
+}
+
+/* Fill element inside the pill; width will be set dynamically later */
+.progress-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFF; /* ensure text is visible on dark fill */
+    font-family: 'Pusab', sans-serif;
+    font-size: 20px; /* larger percentage font to match pill size */
+    font-weight: 100; /* thinner weight for percentage text */
+    border-radius: 999px;
+    pointer-events: none;
+    transition: width 280ms linear;
+}
+
+/* Specific fill colors to be used later */
+/* Make progress fills match the level card background color (#000068) */
+.progress-fill.normal {
+    background: #000068;
+}
+
+.progress-fill.practice {
+    background: #000068;
+}
+
+/* Centered label text inside the pill; appears regardless of fill width */
+.progress-pill .pill-text {
+    position: absolute;
+    left: 50%;
+    top: 58%;
+    transform: translate(-50%, -50%);
+    color: #FFF;
+    font-family: 'Pusab', sans-serif;
+    font-size: 32px; /* slightly reduced size for a more refined percentage appearance */
+    font-weight: 300; /* thinner weight for percentage text */
+    pointer-events: none;
+    -webkit-text-stroke: 1.5px rgba(0,0,0,0.9); /* thinner outline for percentage text */
+    text-shadow: none !important;
+    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.20)) !important;
+}
+
+.level-card-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    will-change: transform;
+    pointer-events: none;
+}
+
+.level-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000086; /* ensure precise navy color */
+    border-radius: 20px;
+    box-shadow: none;
+    display: flex;
+    flex-direction: row;          /* layout: face left, text right */
+    align-items: center;          /* vertically center face and text */
+    justify-content: flex-start;  /* keep content aligned to left */
+    gap: 16px;                    /* spacing between face and name */
+    padding-left: 20px; /* spacing for left elements */
+    pointer-events: auto;
+    will-change: transform, opacity;
+    /* Default state is centered; transitions handled in JS */
+}
+
+.level-card.no-bg {
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.level-name {
+    font-family: 'Pusab', sans-serif;
+    color: white;
+    font-size: 65px; /* adjusted size to fit beside the face */
+    -webkit-text-stroke: 2.5px rgba(0,0,0,0.9);
+    text-shadow: none !important;
+    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.20)) !important;
+    position: relative;
+    top: 0;
+    left: 16px;
+    transform: none;
+    width: auto;
+    text-align: left;
+    text-transform: uppercase;
+    line-height: 1;
+    white-space: nowrap; /* keep name on a single line beside the face */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Slightly larger first-letter spans within level titles and coming-soon text */
+.lvl-first {
+    display: inline-block;
+    font-size: 1.12em; /* slightly more noticeable first-letter enlargement */
+    line-height: 1;
+    margin-right: 0; /* keep spacing natural */
+    vertical-align: baseline;
+}
+
+/* Reduce the enlarged-capital scaling specifically for the Info Popup heading */
+.info-popup-box .lvl-first {
+    font-size: 1.03em; /* slightly smaller caps only inside the info popup */
+}
+
+.difficulty-face {
+    position: relative; /* flow with content */
+    left: 20px;
+    top: -5px;
+    transform: none;
+    width: 80px;        /* made smaller */
+    height: 80px;
+    margin-right: 16px; /* spacing between face and name */
+    object-fit: contain;
+    filter: none; /* Removed drop shadow */
+    image-rendering: smooth;
+    align-self: center; /* ensure the face is vertically centered within the card */
+}
+
+.orbs-container {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.orb-icon {
+    width: 28px;
+    height: auto;
+    image-rendering: smooth;
+}
+
+.orb-count {
+    font-family: 'Pusab', sans-serif;
+    color: #FFF;
+    font-size: 24px;
+    -webkit-text-stroke: 1.5px rgba(0,0,0,0.9);
+    text-shadow: none !important;
+    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.20)) !important;
+    line-height: 1;
+}
+
+.stars-container {
+    position: absolute;
+    top: 10px; /* nudged stars slightly higher */
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stars-container img {
+    width: 35px; /* made the star icon bigger */
+    height: auto;
+    image-rendering: smooth;
+    /* nudge the star icon up slightly without affecting the numeric count */
+    transform: translateY(-4px) translateX(5px);
+    will-change: transform;
+}
+
+.stars-container span {
+    font-family: 'Pusab', sans-serif;
+    color: #FFFFFF;
+    font-size: 40px; /* slightly larger to match the bigger star */
+    -webkit-text-stroke: 2.5px rgba(0,0,0,0.9);
+    text-shadow: none !important;
+    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.20)) !important;
+    line-height: 1;
+}
+
+.coins-container {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 5px;
+}
+
+.coin-icon {
+    width: 52px; /* enlarged uncollected coin icons */
+    height: auto;
+    filter: none; /* show uncollected coin in full color */
+    image-rendering: smooth;
+}
+
+.coming-soon-text {
+    font-family: 'Pusab', sans-serif;
+    color: white;
+    font-size: 72px; /* enlarged coming-soon text */
+    -webkit-text-stroke: 2.5px rgba(0,0,0,0.9);
+    text-shadow: none !important;
+    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.20)) !important;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+/* variant for coming-soon when rendered without the boxed card */
+.coming-soon-text.no-box {
+    background: transparent;
+    padding: 0;
+    width: auto;
+}
+
+/* Info Button */
+.info-btn {
+    position: relative;
+    width: 56px; /* increased size for better touch target / visibility */
+    height: auto;
+    transform: rotate(-90deg); /* CCW 90 degrees */
+    cursor: pointer;
+    z-index: 10020;
+    transition: transform 0.1s ease;
+    image-rendering: auto;
+}
+
+/* Wrapper holding the info icon and the new C-button side by side */
+.info-btn-wrapper {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    gap: 6px; /* tightened so the C button sits directly next to the blue info icon */
+    align-items: center;
+    z-index: 10020;
+    pointer-events: auto;
+}
+
+/* The secondary action button that uses GJ_button_01-uhd.png as a background */
+.info-action-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('/GJ_button_01-uhd.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-drag: none;
+    image-rendering: auto;
+    padding: 10px;
+    min-width: 56px;
+    min-height: 56px;
+    width: auto;
+    height: auto;
+    box-sizing: border-box;
+}
+
+/* Letter inside the action button using Pusab */
+.info-action-btn .action-letter {
+    font-family: 'Pusab', sans-serif;
+    color: #FFFFFF;
+    font-size: 28px;
+    line-height: 1;
+    text-shadow:
+        -1px -1px 0 rgba(0,0,0,0.75), 2px -1px 0 rgba(0,0,0,0.75), -1px 2px 0 rgba(0,0,0,0.75), 2px 2px 0 rgba(0,0,0,0.75);
+    -webkit-text-stroke: 1.5px #000;
+    pointer-events: none;
+    transform: translateY(1px);
+    white-space: pre-wrap;
+    text-align: center;
+}
+
+/* --- Online page overlay: minimal content with centered arrow --- */
+.transition-overlay.online-page {
+    background: linear-gradient(to bottom, #0165FC 0%, #013684 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+}
+
+.online-buttons-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(140px, 220px));
+    grid-auto-rows: auto;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    z-index: 10005;
+    pointer-events: auto;
+    padding: 8px;
+}
+
+.online-button {
+    width: 210px;
+    height: auto;
+    cursor: pointer;
+    image-rendering: auto;
+}
+
+.transition-overlay.online-page .corner-bar {
+    position: absolute;
+    width: 13%;
+    max-width: 420px;
+    height: auto;
+    pointer-events: none;
+    image-rendering: auto;
+    z-index: 10000;
+}
+
+.transition-overlay.online-page .corner-tl {
+    top: 0;
+    left: 0;
+    transform: scaleY(-1);
+}
+
+.transition-overlay.online-page .corner-bl {
+    bottom: 0;
+    left: 0;
+}
+
+.transition-overlay.online-page .menu-back-btn {
+    z-index: 10001;
+}
+
+.placeholder-text {
+    font-family: 'Pusab', sans-serif;
+    color: white;
+    font-size: 52px;
+    margin: 0;
+    text-transform: uppercase;
+    -webkit-text-stroke: 2.5px rgba(0,0,0,0.9);
+    text-shadow: none !important;
+    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.20)) !important;
+    z-index: 10005;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Generic ground texture for transition pages */
+.transition-overlay .blank-ground {
+    position: absolute;
+    bottom: -18.4%;
+    left: 0;
+    width: 100%;
+    height: 32%;         /* slightly taller so the displaced portion still covers visually */
+    background-image: url('/Ground1.png');
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    background-color: #000;
+    image-rendering: smooth;
+    z-index: 9999;
+    opacity: 1;
+}
+
+.transition-overlay.blank .blank-ground::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: inherit;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+}
+
+/* Ensure overlay content sits above the blank background but below the highest z-index system elements */
+.transition-overlay.blank img {
+    z-index: 10000;
+}
+
+/* --- C page overlay (separate full page shown when C is clicked) --- */
+.transition-overlay.c-page {
+    background: linear-gradient(180deg, rgba(6,18,60,1) 0%, rgba(2,6,30,1) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    opacity: 0;
+    transition: opacity 0.18s linear;
+    z-index: 30000;
+}
+
+/* Centered logo for C page */
+.c-page-logo {
+    width: 64%;
+    max-width: 920px;
+    height: auto;
+    image-rendering: auto;
+    pointer-events: none;
+    opacity: 0.98;
+    transform: translateY(-6%);
+}
+
+/* Back button placement for the C page */
+.transition-overlay.c-page .c-page-back {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 72px;
+    height: auto;
+    pointer-events: auto;
+    z-index: 30010;
+    cursor: pointer;
+    image-rendering: auto;
+}
+
+/* Centered Line on the level page (inside blank overlay) */
+.transition-overlay.blank .level-center-line {
+    position: absolute;
+    left: 50%;
+    top: 86.5%;
+    transform: translate(-50%, -50%);
+    width: 1000px;
+    max-width: 2500px;
+    height: auto;
+    pointer-events: none;
+    image-rendering: auto;
+    z-index: 10003;
+}
+
+/* Ensure blank overlay blocks input (fallback in case JS didn't set pointerEvents) */
+.transition-overlay.blank {
+    pointer-events: auto;
+}
+
+/* --- Icon Kit Page Overlay --- */
+.transition-overlay.icon-kit {
+    background: linear-gradient(to bottom, #adadad 0%, #5d5b5b 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+}
+
+.transition-overlay.icon-kit .corner-bar {
+    position: absolute;
+    width: 13%;
+    max-width: 420px;
+    height: auto;
+    pointer-events: none;
+    image-rendering: auto;
+    z-index: 10000;
+}
+
+/* Individual corner placements for the Icon Kit */
+.transition-overlay.icon-kit .corner-tl {
+    top: 0;
+    left: 0;
+    transform: scaleY(-1);
+}
+
+.transition-overlay.icon-kit .corner-tr {
+    top: 0;
+    right: 0;
+    transform: scaleY(-1);
+}
+
+.transition-overlay.icon-kit .corner-bl {
+    bottom: 0;
+    left: 0;
+}
+
+.transition-overlay.icon-kit .corner-br {
+    bottom: 0;
+    right: 0;
+    transform: scaleX(-1);
+}
+
+.transition-overlay.icon-kit .reference-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 125%;
+    max-width: 800px;
+    height: auto;
+    image-rendering: auto;
+    z-index: 10000;
+}
+
+.transition-overlay.icon-kit .menu-back-btn {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    width: 72px;
+    height: auto;
+    z-index: 10001;
+    cursor: pointer;
+}
+
+/* Icon Kit Preview Cube */
+.transition-overlay.icon-kit .preview-cube {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: auto;
+    image-rendering: auto;
+    z-index: 10005;
+    filter: none;
+}
+
+/* Icon Selection Box */
+.transition-overlay.icon-kit .icon-selection-box {
+    position: absolute;
+    top: 62%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 750px;
+    height: 280px;
+    background-color: #4d4d4d;
+    border-radius: 12px;
+    z-index: 10004;
+    pointer-events: auto;
+    display: flex;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.transition-overlay.icon-kit .selection-grid {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 14px;
+    position: relative;
+}
+
+/* Selection Box Indicator */
+.selection-box-indicator {
+    position: absolute;
+    pointer-events: none;
+    z-index: 10010;
+    width: 80px;
+    height: 80px;
+    opacity: 0;
+    image-rendering: smooth;
+    transition: none;
+    will-change: auto;
+}
+
+/* Info Popup Styles */
+.info-popup-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 20000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: auto;
+}
+
+.info-popup-box {
+    width: 640px;
+    max-width: 94vw;
+    min-height: 300px;
+    background: none !important;
+    top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform: scale(0);
+    padding: 28px 24px;
+    box-sizing: border-box;
+    gap: 12px;
+    border-style: solid;
+    border-width: 28px;
+    -webkit-border-image: url('/IMG_0075.png') 80 fill stretch;
+    border-image: url('/IMG_0075.png') 80 fill stretch;
+    position: relative;
+    z-index: 20000;
+}
+
+.info-popup-box > * {
+    position: relative;
+    z-index: 2;
+}
+
+.info-popup-box h2 {
+    font-family: 'Pusab', sans-serif;
+    margin: 0 0 10px 0;
+    font-size: 62px;
+    line-height: 1.04;
+    font-weight: 400;
+    background: linear-gradient(to bottom, #FFB616 0%, #FDEC4B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(2px 2px 0px #000);
+    display: inline-block;
+    overflow: visible;
+}
+
+/* Soundtrack text styling on level selection page */
+.soundtrack-text {
+    position: absolute;
+    left: 50%;
+    bottom: 3.5%;
+    transform: translateX(-50%);
+    z-index: 10006;
+    color: #FFFFFF;
+    font-family: 'Pusab', sans-serif;
+    font-size: 32px;
+    text-transform: uppercase;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+    pointer-events: auto;
+    padding: 8px 18px;
+    min-width: 260px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    -webkit-text-stroke: 1.5px rgba(0,0,0,0.8);
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.4);
+}
+
+.stats-content {
+    font-family: 'Dosis', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-size: 50px;
+    line-height: 1.12;
+    font-weight: 400;
+    letter-spacing: -1px;
+    z-index: 2;
+}
+
+.info-popup-box .colon {
+    color: #FFFFFF;
+    display: inline;
+}
+
+.stats-content .stat-val {
+    color: #FFFFFF !important;
+    font-size: 36px;
+    font-weight: 400;
+}
+
+.popup-ok-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-image: url('/GJ_button_01-uhd.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 14px 36px;
+    min-width: 180px;
+    min-height: 78px;
+    width: 90px;
+    height: 60px;
+    box-sizing: border-box;
+}
+
+.popup-ok-btn img {
+    display: none !important;
+}
+
+.popup-ok-btn span {
+    position: relative;
+    z-index: 999;
+    font-family: 'Pusab', sans-serif;
+    background: linear-gradient(to bottom, #FFB616 0%, #FDEC4B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 2.5px rgba(0,0,0,0.9);
+    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.20)) !important;
+    font-size: 60px;
+    margin-top: 8px;
+    pointer-events: none;
+    white-space: pre-wrap;
+    text-align: center;
+}
+
+/* 9-slice OK in info popup */
+.info-popup-box .popup-ok-btn {
+    background-image: none !important;
+    background-color: transparent !important;
+    border-style: solid;
+    border-width: 8px;
+    -webkit-border-image: url('/GJ_button_01-uhd.png') 8 fill stretch;
+    border-image: url('/GJ_button_01-uhd.png') 8 fill stretch;
+    padding: 10px 15px;
+    min-height: 78px;
+    min-width: 130px;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Placeholder Editor Popup (C button) */
+.placeholder-popup-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.55);
+    z-index: 22000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: none;
+    pointer-events: auto;
+}
+
+.gd-gradient-text {
+    font-family: 'Pusab', sans-serif;
+    background: linear-gradient(to bottom, #FFB616 0%, #FDEC4B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 2.5px rgba(0,0,0,0.9);
+    text-shadow: none !important;
+    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.20)) !important;
+    display: inline-block;
+    overflow: visible;
+    font-size: 28px;
+    line-height: 1;
+    pointer-events: none;
+    margin-top: -3px;
+}
+
+.resume-btn-large {
+    background-image: none !important;
+    background-color: transparent !important;
+    padding: 0 28px !important;
+    min-width: 520px !important;
+    min-height: 78px !important;
+    box-sizing: border-box;
+    border-style: solid;
+    border-width: 12px;
+    -webkit-border-image: url('/GJ_button_01-uhd.png') 12 fill stretch;
+    border-image: url('/GJ_button_01-uhd.png') 20 fill stretch;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-clip: padding-box;
+}
+
+.resume-text-large {
+    font-size: 56px !important;
+    -webkit-text-stroke: 2.5px rgba(0,0,0,0.9);
+    text-shadow: none !important;
+    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.20)) !important;
+    transform: translateY(2px);
+    line-height: 1;
+}
+
+/* Page dots at very bottom of the level page (non-animated) */
+.page-dots {
+    position: absolute;
+    left: 50%;
+    bottom: 1.5%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 10006;
+    pointer-events: auto;
+}
+
+.page-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #96A89E;
+    box-shadow: none;
+    pointer-events: auto;
+}
+
+/* The active (current) page indicator is white */
+.page-dot.active {
+    background-color: #ECFBE4;
+    box-shadow: none;
+}
+
+/* ensure dots are not animated */
+.page-dot,
+.page-dots {
+    transition: none !important;
+    will-change: auto;
+}

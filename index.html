@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometry Dash Menu</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="level-select.css">
+    <link rel="stylesheet" href="editor.css">
+    <style>
+        /* High-priority styles for the loading screen to ensure it appears instantly */
+        #loading-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 100000;
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #loading-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('Background1.png');
+            background-size: cover;
+            background-position: center;
+            background-color: #283EFF;
+            background-blend-mode: multiply;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-screen">
+        <div id="loading-bg"></div>
+
+        <!-- NOTE: #loading-content holds all loading-screen elements.
+             Move the entire block by changing #loading-content positioning in CSS. -->
+        <div id="loading-content">
+            <div id="logo-container">
+                <!-- NOTE: #loading-logo is the main central image.
+                     You can change its size by editing #loading-logo in style.css,
+                     or move it vertically by adjusting #logo-container gap / align-items. -->
+                <img src="R (1).png" id="loading-logo" alt="Logo">
+
+                <!-- NOTE: #loading-planner is overlaid above the main logo.
+                     To move PLANNER.png up/down change #loading-planner's margin, top, or transform
+                     in style.css — this value was moved higher for you. -->
+                <img src="PLANNER.png" id="loading-planner" alt="Planner">
+            </div>
+
+            <!-- NOTE: The groove image is the static frame. Adjust #loading-bar-container width/height
+                 or #loading-bar-groove object-fit to reposition/resize the whole bar. -->
+            <div id="loading-bar-container">
+                <img src="slidergroove-uhd.png" id="loading-bar-groove" alt="Loading Bar">
+                <!-- NOTE: #loading-bar-fill is the visible progress fill. Change its left/top/border-radius
+                     or parent container sizing to reposition it within the groove. -->
+                <div id="loading-bar-fill"></div>
+            </div>
+
+            <div id="loading-text" class="gd-gradient-text"></div>
+        </div>
+    </div>
+
+    <div id="background-container"></div>
+    <div id="ground-container"></div>
+
+    <div id="ui-layer">
+        <a href="https://www.geometrydash.com/" target="_blank" rel="noopener">
+            <img src="R (1).png" id="game-logo" alt="Geometry Dash Logo">
+        </a>
+        
+        <div id="menu-buttons">
+            <img src="Icon.png" id="icon-btn" class="gd-button" draggable="false" alt="Icon">
+            <img src="GJ_playBtn_001.png" id="play-btn" class="gd-button" draggable="false" alt="Play">
+            <img src="online-button.png" id="hammer-btn" class="gd-button" draggable="false" alt="Editor">
+        </div>
+
+        <a href="https://websim.com/@Planner" target="_blank" rel="noopener">
+            <img src="PLANNER.png" id="planner-img" alt="Planner" draggable="false">
+        </a>
+
+        <!-- Centered Settings Button (matches planner size, slightly lifted) -->
+        <img src="settings-button.png" id="settings-btn" alt="Settings" draggable="false">
+
+        <!-- Non-scrolling decorative menu line sized to the ground -->
+        <img src="/Menu line.png" id="menu-line" alt="Menu Line" draggable="false">
+
+        <!-- Centered decorative line -->
+        <img src="Line.png" id="center-line" alt="Center Line" draggable="false">
+    </div>
+
+    <!-- Removed duplicate menu-line from outside the UI layer -->
+
+    <!-- Shared spring animation helpers -->
+    <script src="spring.js"></script>
+    <!-- Main app bootstrap -->
+    <script type="module" src="main.js"></script>
+</body>
+</html>

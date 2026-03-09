@@ -1,0 +1,516 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; 
+    background-color: #000;
+    font-family: Arial, sans-serif;
+}
+
+/* --- Parallax Backgrounds --- */
+#background-container, #ground-container {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    image-rendering: smooth; /* Keeps pixel art crisp */
+    z-index: 1;
+}
+
+#background-container::after, #ground-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: inherit;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+}
+
+#background-container {
+    top: 0;
+    height: 150%;
+    background-image: url('/Background1.png');
+    /* use a natural cover sizing so the artwork centers and fills the viewport */
+    background-size: cover;
+    /* nudged the texture upward so the visible artwork sits higher on the screen */
+    background-position: center 3390%;
+}
+
+#ground-container {
+    bottom: -5%;
+    height: 27%;
+    background-image: url('/Ground1.png');
+    /* removed top border to eliminate black outline above the ground texture */
+}
+
+/* --- UI Overlay --- */
+#ui-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10; /* Ensure UI sits on top of background */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none; /* Let clicks pass through empty spaces */
+}
+
+/* Non-scrolling menu line that matches ground size */
+#menu-line {
+    position: absolute;
+    bottom: -5%;
+    left: 0;
+    width: 100%;
+    height: 27%; /* matches the new ground dimensions */
+    object-fit: cover;
+    pointer-events: none;
+    z-index: 10;
+    image-rendering: auto;
+}
+
+#game-logo {
+    position: absolute;
+    top: 12%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 92%;
+    max-width: 1100px;
+    height: auto;
+    margin: 0;
+    pointer-events: auto;
+    /* floating animation removed */
+}
+
+#menu-buttons {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px; /* Space between Play and Hammer button */
+    pointer-events: auto;
+}
+
+.gd-button {
+    cursor: pointer;
+    transition: transform 0.1s ease-out, filter 0.1s ease-out;
+    user-select: none; /* Prevent highlighting */
+    -webkit-user-drag: none; /* Prevent dragging the image */
+    min-width: 44px;
+    min-height: 44px;
+}
+
+/* Icon Button Styling (left of play) */
+#icon-btn {
+    width: 160px;
+    height: auto;
+}
+
+/* Play Button Styling */
+#play-btn {
+    width: 260px; /* Larger play button */
+    height: auto;
+}
+
+/* Hammer Button Styling */
+#hammer-btn {
+    width: 150px; /* Larger hammer/editor button */
+    height: auto;
+}
+
+@font-face {
+    font-family: 'Pusab';
+    src: url('/PUSAB___.otf');
+}
+
+@font-face {
+    font-family: 'Dosis';
+    src: url('/Dosis-VariableFont_wght (1).ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* --- Loading Screen --- */
+#loading-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: none; /* Disappear instantly as requested */
+}
+
+#loading-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('/Background1.png');
+    background-size: cover;
+    background-position: center;
+    background-color: #283EFF;
+    background-blend-mode: multiply;
+}
+
+#loading-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    width: 100%;
+}
+
+#logo-container {
+    position: relative;
+    width: 95%;
+    max-width: 1100px; /* Larger logo container */
+    display: flex;
+    flex-direction: column; /* Stack vertically to place planner "above" logo */
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    /* NOTE: Change gap to control vertical spacing between planner and logo. */
+}
+
+#loading-logo {
+    width: 100%;
+    height: auto;
+    order: 2; /* Logo is below planner */
+    /* NOTE: Adjust width or add transform to move the logo independently. */
+}
+
+/* PLANNER positioning: moved higher (larger negative margin) so it sits further above the logo.
+   To move PLANNER.png around: change margin-bottom, add top, or use transform: translateY(...). */
+#loading-planner {
+    width: 35%; /* Sized appropriately above logo */
+    height: auto;
+    order: 1; /* Planner is above logo */
+    margin-bottom: -80px; /* Increased negative margin to move PLANNER higher */
+    z-index: 2;
+  transform: translateY(-120px);
+    /* Example alternatives you can use:
+       top: -20px; position: relative;
+       transform: translateY(-24px);
+       (Uncomment and tweak whichever approach you prefer.) */
+}
+
+#loading-bar-container {
+    position: relative;
+    width: 70%;
+    max-width: 600px;
+    height: 40px;
+}
+
+#loading-bar-groove {
+    width: 100%;
+    height: 100%;
+    object-fit: stretch;
+}
+
+#loading-bar-fill {
+    position: absolute;
+    top: 21%;
+    left: 0.1%;
+    height: 50%;
+    width: 0%;
+    /* Use the sliderBar texture as the visible fill inside the groove.
+       Keep the texture from stretching by using 'background-size: auto 100%'
+       and let width change only clip the texture instead of scaling it. */
+    background-image: url('/sliderBar-uhd.png');
+    background-size: auto 100%;
+    background-position: left center;
+    background-repeat: repeat-x;
+    /* Keep the left end rounded but make the right tip square by default */
+    border-radius: 18px 0 0 18px;
+    overflow: hidden;
+    transition: width 0.12s linear, border-radius 140ms ease;
+    z-index: -1;
+}
+
+/* When the fill is essentially complete, switch to a fully rounded pill (18px all corners).
+   JS toggles the 'rounded-end' class when the fill is near 100%. */
+#loading-bar-fill.rounded-end {
+    border-radius: 18px !important;
+}
+
+/* Extra front-fill that appears when the primary fill reaches its max.
+   It uses the same texture but is positioned at the groove end and grows forward,
+   avoiding any stretching of the original texture. */
+#loading-bar-extra {
+    position: absolute;
+    top: 15%;
+    /* left is set dynamically by JS to begin right after the primary fill max */
+    height: 70%;
+    width: 0%;
+    background-image: url('/sliderBar-uhd.png');
+    background-size: auto 100%;
+    background-position: left center;
+    background-repeat: repeat-x;
+    border-radius: 18px;
+    overflow: hidden;
+    z-index: 2;
+    pointer-events: none;
+    transition: width 0.12s linear;
+}
+
+#loading-text {
+    position: absolute;
+    top: 100%;
+    margin-top: 38px;
+    font-size: 34px; /* Slightly adjusted for better fit with the 27-character limit */
+    text-transform: uppercase;
+    -webkit-text-stroke: 2.1px rgba(0,0,0,0.9);
+    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.20)) !important;
+    text-shadow: none !important;
+    text-align: center;
+    white-space: pre-wrap;
+    line-height: 1.2;
+    width: 90vw;
+    max-width: 900px;
+}
+
+/* --- Click Animations --- */
+/* JavaScript spring animation will handle scaling; keep a smooth transition fallback */
+.gd-button {
+    will-change: transform;
+    /* keep visual feedback for non-JS cases: a subtle scale */
+    transition: transform 0.12s cubic-bezier(.2,.8,.2,1), filter 0.12s ease-out;
+}
+
+/* Small planner icon bottom-left */
+#planner-img {
+    position: absolute;
+    bottom: 20px;
+    left: 10px;
+    width: 250px;    /* increased size from 56px to 96px */
+    height: auto;
+    z-index: 40; /* raised so planner sits above menu-line */
+    pointer-events: auto;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-drag: none;
+    opacity: 1;     /* made fully opaque */
+}
+
+/* Centered settings button near bottom (much smaller now) */
+#settings-btn {
+    position: absolute;
+    bottom: 50px;        /* slightly lifted above the very bottom */
+    left: 50%;
+    width: 100px;         /* slightly smaller settings button */
+    height: auto;
+    z-index: 40;         /* same stacking as planner */
+    pointer-events: auto;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-drag: none;
+    opacity: 1;
+
+    /* Keep initial centering transform so the JS spring animator preserves centering */
+    transform: translateX(-50%);
+
+    will-change: transform;
+    /* Idle pulse removed — spring animator handles interaction feedback */
+}
+
+/* Centered Line.png */
+#center-line {
+    position: absolute;
+    top: 77.9%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 1000px;
+    height: auto;
+    pointer-events: none;
+    z-index: 25; /* sits above background but below planner */
+    image-rendering: auto;
+}
+
+/* Simple float animation for the logo */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes popupSpringIn {
+    0% { transform: scale(0); }
+    60% { transform: scale(1.1); }
+    85% { transform: scale(0.98); }
+    100% { transform: scale(1.0); }
+}
+
+/* Simple full-screen transition overlays used by the play-button flow */
+.transition-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.2s linear;
+    will-change: opacity;
+}
+
+/* black fade-to for first step */
+.transition-overlay.black {
+    background: #000;
+}
+
+/* blank screen that fades in after black — now solid black (no gradient/glass) */
+.transition-overlay.blank {
+    background: #000;
+}
+
+/* Decorations shown only inside the blank overlay */
+.transition-overlay.blank .corner-bar {
+    position: absolute;
+    width: 13%;          /* increased to make corner graphics noticeably bigger */
+    max-width: 420px;    /* allow a much larger corner graphic on wide screens */
+    height: auto;
+    pointer-events: none;
+    image-rendering: auto;
+    opacity: 1;
+    will-change: transform, opacity;
+}
+
+/* flipped variant to mirror the image horizontally for bottom-right */
+.transition-overlay.blank .corner-bar.flipped {
+    transform: scaleX(-1);
+}
+
+/* Left / Right side arrows inside the blank overlay */
+.transition-overlay.blank .side-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4%;                /* much smaller arrows for level page */
+    max-width: 64px;          /* cap size on wide screens reduced */
+    min-width: 36px;          /* still a usable touch target */
+    height: auto;
+    pointer-events: auto;     /* arrows should be interactive */
+    image-rendering: auto;
+    opacity: 0.95;
+    will-change: transform, opacity;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-drag: none;
+    z-index: 10000;
+}
+
+/* mirror the arrow graphic for left side so it points outward */
+.transition-overlay.blank .side-arrow.left {
+    left: 0;
+    left: 20px;
+    transform: translateY(-50%) scaleX(-1);
+}
+
+/* right arrow points outward (original graphic points right, so keep as-is) */
+.transition-overlay.blank .side-arrow.right {
+    right: 0;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+/* Top-left menu back button inside the blank overlay */
+.transition-overlay.blank .menu-back-btn {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 72px;       /* increased size for better touch target */
+    max-width: 18%;    /* slightly larger responsive cap */
+    height: auto;
+    pointer-events: auto; /* must be clickable */
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-drag: none;
+    z-index: 10001;
+    image-rendering: auto;
+    will-change: transform, opacity;
+    /* Ensure it sits visually above other blank overlay images */
+}
+
+/* Make sure the gd-button transform rules still apply within the overlay */
+.transition-overlay.blank .gd-button {
+    transition: transform 0.12s cubic-bezier(.2,.8,.2,1), filter 0.12s ease-out;
+    will-change: transform;
+}
+
+/* Individual corner placements */
+.transition-overlay.blank .corner-top-left {
+    top: 8px;
+    left: 8px;
+    transform-origin: top left;
+}
+.transition-overlay.blank .corner-top-right {
+    top: 8px;
+    right: -1px;
+    transform-origin: top right;
+}
+.transition-overlay.blank .corner-bottom-left {
+    bottom: -1px;
+    left: -2px;
+    transform-origin: bottom left;
+}
+/* CORRECTED Bottom Right Placement */
+.transition-overlay.blank .corner-bottom-right {
+    bottom: 0;        /* Flush with bottom */
+    right: 0;         /* Flush with right */
+    right: -2px;         /* align */
+    bottom: -1px;      /* align 2 */
+    
+    /* i hate ts bruh
+    */
+    transform-origin: bottom center; 
+}
+
+/* Top-centered bar - resized to fit area better (enlarged for level page) */
+.transition-overlay.blank .top-bar {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;         /* increased width for a much larger Bar2 */
+    max-width: 720px;   /* allow a much larger top bar on wide screens */
+    height: auto;
+    pointer-events: none;
+    image-rendering: smooth;
+    opacity: 1;
+    will-change: transform, opacity;
+}
+
+@media (min-width: 1024px) {
+    .transition-overlay.blank .top-bar {
+        top: 0;
+        width: 50%;
+        max-width: 1200px;
+    }
+}
+
+/* tombstone: moved level card, progress bar, info popup, online, icon-kit, C-page, and related overlay styles to level-select.css */
+
+/* Prevent long-press/save on mobile and right-click save on desktop:
+   - disable the iOS/Android touch callout and image dragging globally
+   - keep pointer interactivity but prevent native save dialogs */
+img {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-drag: none;
+    user-drag: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+}
